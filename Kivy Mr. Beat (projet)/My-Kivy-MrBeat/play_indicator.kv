@@ -1,11 +1,21 @@
-
+# Play Indicator Widget
 <PlayIndicatorWidget>:
     border: (0,0,0,0)
     canvas.after:
         Color:
-            rgba: 0.7, 0.8, 0.3, 0  # disable by alpha
+            rgba: 0.7, 0.8, 0.3, 0  # disabled by alpha
         Rectangle:
             pos: self.pos
             size: self.size
 
 
+# Image Separator
+<ImageSeparator@Image>:
+    source: "images/track_separator.png"
+    size_hint_x: None
+    width: dp(15)
+
+
+# Play Indicator Image
+<PlayIndicatorImage@Image>
+    source: "images/indicator_light_off.png"

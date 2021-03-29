@@ -10,46 +10,100 @@ MainWidget:
     BoxLayout:
         orientation: "vertical"
 
-        BoxLayout:
+        # TOP LAYOUT
+        RelativeLayout:
             size_hint_y: None  # manual height
-            height: dp(40)
+            height: dp(60)
+            Image:
+                source: "images/top_background.png"
+                allow_stretch: True
+                keep_ratio: False
+            Image:
+                source: "images/logo.png"
+                size_hint_x: None
+                width: dp(220)
+                allow_stretch: True
 
-            HiddenControlButton:
-                width: root.button_width_lalign
+            BoxLayout:
+                size_hint_x: None
+                width: dp(180)
+                pos_hint: { "center_x" : 0.5 }
+                PlayStopLabel:
+                    text: root.play_stop_label + " : " # PLAY or STOP
+                    size_hint_x: None
+                    width: dp(30)
+                    color: (0,0.99,0.99,1)
+                PlayStopControlButton:
+                    # text: root.play_stop_label  # PLAY or STOP
+                    on_press: root.play_stop_audio()
+                    background_color: root.play_stop_color
+                    background_normal: root.play_stop_bg_normal
+                    background_down: root.play_stop_bg_down
+                    border: (2,2,2,2)
 
-            PlayStopControlButton:
-                text: root.play_stop_label  # PLAY or STOP
-                on_press: root.play_stop_audio()
-                background_color: root.play_stop_color
+            BoxLayout:
+                size_hint_x: None
+                width: dp(260)
+                pos_hint: { "right" : 1.0 }
+                BpmLabel:
+                    text: "BPM : "
+                BpmControlButton:
+                    on_press: root.update_bpm(self.text)
+                    on_release: root.stop_and_change_bpm()
+                    text: "-"
+                    background_normal: "images/minus_button_normal.png"
+                    background_down:  "images/minus_button_down.png"
+                    state: 'normal'
+                    background_color: root.a_red_color
+                RelativeLayout:
+                    Image:
+                        source: "images/bpm_lcd_background.png"
+                        allow_stretch: True
+                        keep_ratio: False
+                    LabelCounter:
+                        text: "888"
+                    BpmCounter:
+                        text: '{:0>3}'.format(root.bpm_value_label)
+                BpmControlButton:
+                    on_press: root.update_bpm(self.text)
+                    on_release: root.stop_and_change_bpm()
+                    text: "+"
+                    background_normal: "images/plus_button_normal.png"
+                    background_down:  "images/plus_button_down.png"
+                    background_color: root.a_green_color
+                Widget:
+                    width: dp(28)
+                    size_hint_x: None
 
-            HiddenControlButton:
-                width: dp(250)
+        # BOTTOM LAYOUT
+        RelativeLayout:
+            Image:
+                source: "images/background.jpg"
+                allow_stretch: True
+                keep_ratio: False
+            BoxLayout:
+                x: dp(16)
+                y: dp(16)
+                size_hint: None, None
+                size: (self.parent.width - dp(32), self.parent.height - dp(32))  # adapt margins
+                orientation: "vertical"
 
-            BpmLabel:
-                text: "BPM : "
-            BpmControlButton:
-                on_press: root.update_bpm(self.text)
-                on_release: root.stop_and_change_bpm()
-                text: "-"
-                state: 'normal'
-                background_color: root.a_red_color
-            BpmLabel:
-                text: root.bpm_value_label
-            BpmControlButton:
-                on_press: root.update_bpm(self.text)
-                on_release: root.stop_and_change_bpm()
-                text: "+"
-                background_color: root.a_green_color
+                PlayIndicatorWidget:
+                    id: play_indicator_widget_id
+                    size_hint_y: None  # manual height
+                    height: dp(15)
+                ScrollView:
+                    do_scroll_x: False
+                    do_scroll_y: True
+                    bar_width: dp(2)
+                    bar_color: (0,0.9,0.9,1)
+                    bar_inactive_color: (0,0.9,0.9,0.2)
+                    BoxLayout:
+                        size_hint_min_y: dp(100) * root.nbr_of_tracks  # max. height track x nbr_tracks
+                        id: track_widgets_id
+                        orientation: "vertical"
+                        # list of TrackWidget ...
 
-        PlayIndicatorWidget:
-            id: play_indicator_widget_id
-            size_hint_y: None  # manual height
-            height: dp(15)
-
-        BoxLayout:
-            id: track_widgets_id
-            orientation: "vertical"
-            # list of TrackWidget ...
 
 <HiddenControlButton@Button>:
     size_hint_x: None
@@ -69,13 +123,32 @@ MainWidget:
     always_release: True
 
 <BpmLabel@Label>:
+    width: dp(60)
     size_hint_x: None
-    width: dp(50)
+    color: (0,0.99,0.99,1)
     border: (2,2,2,2)
+    bold: False
+    font_size: dp(24)
+
+<BpmCounter@BpmLabel>:
+    width: dp(60)
+    size_hint_x: None
+    font_name: "fonts/Lcd.ttf"
+    font_size: dp(32)
+    pos: dp(14) , dp(2)
+    opacity: 0.9
 
 <PlayStopControlButton@Button>:
     border: (0,0,0,0)
-    size_hint_x: None
-    width: dp(180)
-    #background_normal: ''
 
+<PlayStopLabel@Label>:
+    color: (0,0.99,0.99,1)
+    border: (2,2,2,2)
+    bold: False
+    font_size: dp(24)
+
+<LabelCounter@BpmCounter>
+    opacity: 0.2
+
+<VerticalSpacingWidget@Widget>:
+    size_hint_y: 0.01

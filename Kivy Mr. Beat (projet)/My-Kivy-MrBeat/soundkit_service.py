@@ -1,4 +1,4 @@
-# Project "MR BEAT" - version 2 - SOUND KIT SERVICE
+# Project "MR BEAT" - version 3 - SOUND KIT SERVICE
 import wave
 from array import array
 
@@ -69,7 +69,7 @@ class SoundKit:
 class SoundKit1(SoundKit):
 
     def __init__(self):
-        self.sounds = (   Sound("sounds/kit1/kick.wav", "KICK")
+        self.sounds = ( Sound("sounds/kit1/kick.wav", "KICK")
                , Sound("sounds/kit1/clap.wav", "CLAP")
                , Sound("sounds/kit1/shaker.wav", "SHAKER")
                , Sound("sounds/kit1/snare.wav", "SNARE")
@@ -102,11 +102,16 @@ class SoundKitService():
     source_tracks = {}  # dico
     source_tracks_mixer = None  # mixer for all tracks
 
-    def __init__(self, audio_engine, bpm, nbr_steps):
-        #self.sound_kit = SoundKit1() # kit1 - default
-        self.sound_kit = SoundKit2() # kit2 - handpan
+    def __init__(self, nbr_groups, audio_engine, bpm, nbr_steps, sound_kit_id):
+        if sound_kit_id == 1 :
+            self.sound_kit = SoundKit1() # kit1 - default
+        elif sound_kit_id == 2 :    
+            self.sound_kit = SoundKit2() # kit2 - handpan
+        else:
+            raise TypeError("Invalid SoundKit Id -> 1 or 2")
         self.audio_engine = audio_engine
         self.bpm = bpm
+        self.nbr_groups = nbr_groups
         self.nbr_steps = nbr_steps
 
     # Get number of tracks
@@ -116,6 +121,10 @@ class SoundKitService():
     # Get number of steps per track
     def get_nbr_steps(self):
         return self.nbr_steps
+
+    # Get length of a group of steps per track
+    def get_nbr_groups(self):
+        return self.nbr_groups
 
     # Get list of sounds available
     def get_sounds(self):
@@ -182,6 +191,6 @@ class SoundKitService():
 
     # Compute step_nbr_frames for tracks and mixer
     def compute_step_nbr_frames(self):
-        new_step_nbr_frames = int( (self.get_frame_rate() * 60) / (4 * self.get_bpm()))  # formula 1
-        #  new_step_nbr_frames = int((self.frame_rate * 60 * 4) / (self.nbr_steps * self.bpm))  # formula 2
+        # new_step_nbr_frames = int( (self.get_frame_rate() * 60) / (4 * self.get_bpm()))  # formula 1 : 1 big foot = 4 steps
+        new_step_nbr_frames = int((self.get_frame_rate() * 60) / (self.get_nbr_groups() * self.get_bpm()))  # formula 2 : 1 big foot = group_steps_length
         return new_step_nbr_frames

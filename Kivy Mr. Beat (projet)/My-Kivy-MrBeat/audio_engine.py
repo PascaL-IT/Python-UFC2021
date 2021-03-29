@@ -1,4 +1,4 @@
-# Project "MR BEAT" - version 2 - AUDIO ENGINE
+# Project "MR BEAT" - version 3 - AUDIO ENGINE
 from array import array
 from audiostream import get_output
 from audio_source_generator import AudioSourceGenerator

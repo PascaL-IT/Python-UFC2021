@@ -1,4 +1,4 @@
-# Project "MR BEAT" - version 2 - AUDIO SOURCE GENERATOR
+# Project "MR BEAT" - version 3 - AUDIO SOURCE GENERATOR
 from array import array
 from audiostream.sources.thread import ThreadSource
 

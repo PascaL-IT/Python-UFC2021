@@ -1,15 +1,28 @@
 
 <TrackWidget>:
+    size_hint_max_y : dp(100)   # max. height track
+    size_hint_min_y : dp(60)    # min. height track
     # list of TrackStepButton ...
 
 # Track Step Button is a styled ToggleButton
 <TrackStepButton>:
-    border: (0,1,0,1)
+    background_normal: "images/step_normal1.png"
+    background_down: "images/step_down.png"
+    # border: (0,1,0,1)
 
 # Track Sound Button is a styled Button with the sound trial
 <TrackSoundButton>:
+    background_normal: "images/sound_button_normal.png"
+    background_down: "images/sound_button_down.png"
     size_hint_x: None  # to manage manually the width
     # width: dp(100) - now set dynamically via function
-    text: ""
-    border: (0,0,0,0)
+    bold: True
+    font_size: dp(16)
+
+# Track Sound Image Separator
+<ImageSeparator@Image>:
+    source: "images/track_separator.png"
+    size_hint_x: None
+    width: dp(15)
+
 

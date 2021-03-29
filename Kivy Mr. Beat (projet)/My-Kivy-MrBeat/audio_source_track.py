@@ -1,4 +1,4 @@
-# Project "MR BEAT" - version 2 - AUDIO SOURCE TRACK
+# Project "MR BEAT" - version 3 - AUDIO SOURCE TRACK
 from audiostream.sources.thread import ThreadSource
 
 
@@ -49,7 +49,7 @@ class AudioSourceTrack(ThreadSource):
             #             that is smaller than one step -> play sound with additional silence
             else:
                 silence_nbr = step_nbr_frames - self.nbr_input_frames + wav_index
-                result_buffer = self.input_frames[wav_index:self.nbr_input_frames] # TODO check
+                result_buffer = self.input_frames[wav_index:self.nbr_input_frames]
                 result_buffer.extend(self.silence[0:silence_nbr])
         # increment frame index to keep track of where we are (per chunk of step_nbr_frames)
         self.current_frame_index += step_nbr_frames
