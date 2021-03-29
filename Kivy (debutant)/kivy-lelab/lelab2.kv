@@ -1,0 +1,86 @@
+ImagesSample:
+
+<ImagesSample@GridLayout>
+    cols: 3
+    Image:
+        source: "images/cake.jpg"
+        allow_stretch: False
+        keep_ratio: False
+    Image:
+        source: "images/cake.jpg"
+        allow_stretch: True
+        keep_ratio: True
+    Image:
+        source: "images/cake.jpg"
+        allow_stretch: True
+        keep_ratio: False
+    AsyncImage:
+        source: "images/donut.gif"
+        anim_delay: 1/60
+
+
+#MainWidget:
+
+<MainWidget>:
+
+    cols: 3
+
+    ToggleButton:
+        text: "OFF"
+        on_state: root.on_togglebutton_state(self)
+        size_hint: None, 1
+        width: "100dp"
+
+    Button:
+        text: "Cliquer"
+        on_press: root.on_button_click()
+        disabled: not root.flag
+
+    Label:
+        text: root.text_label
+        font_name: "fonts/Lcd.ttf"
+        font_size: "40dp"
+        color: 1 , 0 , 1 , 0.9
+
+    Switch:
+        id: switch1
+        active: True
+        on_active: root.on_switch_active(self)
+        size_hint: None, 1
+        width: "100dp"
+
+    Slider:
+        id: slider1
+        min: 0
+        max: 10
+        value: 5
+        orientation: "vertical"
+        # on_value: root.on_slider_value(self)
+        disabled: not switch1.active
+
+    BoxLayout:
+
+        orientation: "vertical"
+
+        Label:
+            text: str(int(slider1.value))
+            font_name: "fonts/Lcd.ttf"
+            font_size: "60dp"
+            color: 0 , 1 , 0 , 0.9
+
+        ProgressBar:
+            max: 10
+            value: slider1.value
+
+    TextInput:
+        id: textinput1
+        # text: "lorem..."
+        focus: True
+        size_hint: None, 1
+        width: "100dp"
+        multiline: False
+        on_text_validate: root.on_txt_validated(self)
+
+    Label:
+        #text: textinput1.text
+        text: root.text_input

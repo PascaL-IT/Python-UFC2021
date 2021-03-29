@@ -1,0 +1,119 @@
+# MainPageLayout:
+
+# MainPageLayout , MainScrollView , MainStackLayout , MainGridLayout , MainAnchorLayout , MainBoxLayout , MainWidget
+
+#7
+<MainPageLayout>:
+    MainScrollView:
+        canvas.before:
+            Color:
+                rgba: 1, 0, 0, 1
+            Rectangle:
+                size: self.size
+                pos: self.pos
+    MainGridLayout:
+        canvas.before:
+            Color:
+                rgba: 0, 1, 0, 1
+            Rectangle:
+                size: self.size
+                pos: self.pos
+    MainBoxLayout:
+        canvas.before:
+            Color:
+                rgba: 0, 0, 1, 1
+            Rectangle:
+                size: self.size
+                pos: self.pos
+
+#6
+<MainScrollView@ScrollView>:
+    bar_width: 10
+    bar_color: 5, 10, 15, .8
+    bar_inactive_color: 5, 20, 10, .5
+    scroll_type: ['bars']
+
+    MainStackLayout:
+        size_hint: 1 , None
+        height: self.minimum_height
+
+
+#5
+<MainStackLayout>:
+
+    #orientation: "rl-bt"
+    #padding: ( "20dp" , "0dp" , "20dp" , "0dp" )
+    spacing: ( "50dp" , "50dp" )
+
+    Button:
+        text: "S1"
+        size_hint: 0.2 , 0.2
+
+    Button:
+        text: "S2"
+        size_hint: 0.2 , 0.2
+
+#4
+<MainGridLayout@GridLayout>:
+
+    rows: 3
+    cols: 2
+
+    Button:
+        text: "G1"
+
+    Button:
+        text: "G2"
+
+    Button:
+        text: "G3"
+
+    MainAnchorLayout:
+
+#3
+<MainAnchorLayout>:
+
+    Button:
+        text: "Anchor"
+        size_hint: 0.5 , 0.1  # W , H
+
+
+#2
+<MainBoxLayout>:
+
+    orientation: "horizontal"
+    spacing: "10dp"
+
+    Button:
+        text: "A"
+        size_hint: 0.5 , None  # W , H
+        # width: "60dp"
+        heigth: "40dp"
+        pos_hint: { "top" : 0.5 }
+
+    BoxLayout:
+        orientation: "vertical"
+        Button:
+            text: "B"
+        Button:
+            text: "C"
+
+    Label:
+        orientation: "vertical"
+        text: "Label"
+
+#1
+<MainWidget>:
+
+    Button:
+        text: "Hello"
+        size : "100dp" , "40dp"
+        pos: "200dp" , "50dp"
+        color: 1,0,1,1
+
+    Label:
+        text: "Hello2"
+        size : "100dp" , "40dp"
+        pos: "300dp" , "50dp"
+        color: 0,1,1,1
+

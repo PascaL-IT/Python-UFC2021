@@ -1,0 +1,129 @@
+#: set s dp(100)
+
+<CanvasExample1>:
+    canvas:
+        Rectangle:
+            pos: self.center_x-s/2, self.center_y-s/2
+            size: s, s
+        Color:
+            rgba: 0, 0, 1, 1    # Blue
+        Ellipse:
+            pos: self.center_x-s/2, self.center_y-s/2
+            size: 2*s, s
+        Line:
+            points: (0,0,self.width/4,100,0,400, self.width/2,self.width)
+            width: 4
+
+
+<CanvasExample2>:
+    canvas:
+        Color:
+            rgba: 1, 0, 1, 1
+        Line:
+            points: (0, self.height/2, self.width, self.height/2)
+            width: 1
+        Line:
+            points: (self.width/2, 0, self.width/2, self.height)
+            width: 2
+
+
+<CanvasExample3>:
+    canvas:
+        Color:
+            rgba: 1, 0, 0.6, 0.8
+        Line:
+            circle: (200, 200, 100)         # center_x, center_y, radius
+            width: 2
+        Line:
+            ellipse: (500, 300, 100, 200)   # center_x, center_y, radius h, radius, v
+            width: 1
+        Line:
+            rectangle: (100, 400, 150, 80)    # x , y , w, h
+            width: 5
+
+
+<CanvasExample4>:
+    Label:
+        text: root.label
+        size_hint: 0.2 , 0.2
+        pos: 100, root.height - 70
+        color: 1, 0, 1, 1
+    Button:
+        text: "Move"
+        size_hint: 0.2 , 0.2
+        on_press: root.on_button_click()
+
+
+<CanvasExample5>:
+    Label:
+        text: root.label
+        pos: 100, root.height - 70
+        color: 1, 0, 0, 1
+
+    Label:
+        text: "Speed: "
+        pos: -15, root.height - 100
+        color: 1, 1, 1, 1
+
+    Slider:
+        id: slider1
+        pos: 60, root.height - 100
+        min: 0
+        max: 200
+        step: 10
+        value: 1
+        cursor_size: (20,20)
+        value_track: True
+        value_track_color: 1, 0 , 0, 1
+        value_track_width: "4dp"
+        orientation: "horizontal"
+        on_value: root.on_slider_value(self)
+
+    Label:
+        text: str(int(slider1.value))
+        color: 1, 0 , 0, 1
+        pos: 60, root.height - 125
+
+
+<CanvasExample6>:
+    BoxLayout:
+        size: root.size
+        Widget:
+            canvas:
+                Color:
+                    rgba: 0, 1, 0, 0.4  # green
+                Rectangle:
+                    size: self.size
+            Label:
+                text: "A"
+                color: 1,1,1,1
+        Button:
+            text: "B"
+            color: 1,1,1,1
+            canvas.before:
+                Color:
+                    rgba: 1, 0, 0, 1   # red
+                Rectangle:
+                    size: self.size
+                    pos: self.pos
+
+
+<CanvasExample7>:
+    RelativeLayout:
+        canvas:
+            Color:
+                rgba: 0, 0, 0, 1  # black
+            Rectangle:
+                size: self.size
+    RelativeLayout:
+        canvas:
+            Color:
+                rgba: 1, 1, 0, 1  # yellow
+            Rectangle:
+                size: self.size
+    RelativeLayout:
+        canvas:
+            Color:
+                rgba: 1, 0, 0, 1  # red
+            Rectangle:
+                size: self.size

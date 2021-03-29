@@ -1,0 +1,228 @@
+#:import l layouts
+#:import w widgets
+#:import bwab boxlayout_with_action_bar
+
+
+#6 - Main Tabbed Panel
+<MainTabbedPanel@TabbedPanel>:
+
+    #size_hint: .5, .5
+    #pos_hint: {'center_x': .5, 'center_y': .5 }
+    do_default_tab: False
+
+    TabbedPanelItem:
+        text: "Page"
+        MainPageLayout:
+    TabbedPanelItem:
+        text: "Scroll"
+        MainScrollView:
+    TabbedPanelItem:
+        text: "Stack"
+        MainStackLayout:
+    TabbedPanelItem:
+        text: "Grid"
+        MainGridLayout:
+    TabbedPanelItem:
+        text: "Anchor"
+        MainAnchorLayout:
+    TabbedPanelItem:
+        text: "Box"
+        MainBoxLayout:
+    TabbedPanelItem:
+        text: "Widget"
+        MainWidget:
+
+<MyStackedScreenManagerWithMenuAndTabs>:
+    Screen:
+        name: "MainMenu"
+        MainMenu:
+    Screen:
+        name: "S1"
+        BoxLayoutWithActionBar:
+            title: "Layouts"
+            MainTabbedPanel:
+    Screen:
+        name: "S2"
+        BoxLayoutWithActionBar:
+            title: "Widgets2"
+            MainWidget2:
+    Screen:
+        name: "S3"
+        BoxLayoutWithActionBar:
+            title: "Images"
+            ImagesSample:
+
+
+
+#5 - Main Menu
+<MainMenu@BoxLayout>:
+    orientation: "vertical"
+    Button:
+        text: "Layouts"
+        on_press: app.manager.push("S1")
+    Button:
+        text: "Widgets"
+        on_press: app.manager.push("S2")
+    Button:
+        text: "Images"
+        on_press: app.manager.push("S3")
+
+<MyStackedScreenManagerWithMenu>:
+    Screen:
+        name: "MainMenu"
+        MainMenu:
+    Screen:
+        name: "S1"
+        BoxLayoutWithActionBar:
+            title: "Layouts"
+            MainPageLayout:
+    Screen:
+        name: "S2"
+        BoxLayoutWithActionBar:
+            title: "Widgets"
+            MainWidget2:
+    Screen:
+        name: "S3"
+        BoxLayoutWithActionBar:
+            title: "Images"
+            ImagesSample:
+
+
+#4 - Screen Manager and BoxLayoutWithActionBar (mode: push/pop)
+#MyStackedScreenManagerWithBLwAB:
+
+#<MyStackedScreenManagerWithBLwAB@ScreenManagerPushPop>:
+<MyStackedScreenManagerWithBLwAB>:      # because class defined in main3.py, use of app.manager.
+    Screen:
+        name: "S1"
+        BoxLayout:
+            orientation: "vertical"
+            Label :
+                text: "Screen 1"
+                text_size: None, None
+            BoxLayout:
+                Button:
+                    text: "B1.1 - Go to Images"
+                    on_press: app.manager.push("S2")
+                Button:
+                    text: "B1.2 - Go to S3"
+                    on_press: app.manager.push("S3")
+
+    Screen:
+        name: "S2"   # display ImagesSample & ActionBar
+        BoxLayoutWithActionBar:
+            title: "Images"
+            ImagesSample:
+
+    Screen:
+        name: "S3"
+        BoxLayout:
+            orientation: "vertical"
+            Label:
+                text: "Screen 3"
+            Button:
+                text: "B3 (back to S1)"
+                on_press: app.manager.pop()
+
+
+#3 - Screen Manager with ActionBar (mode: push/pop)
+#MyStackedScreenManagerWithAB:
+
+<MyStackedScreenManagerWithAB@ScreenManagerPushPop>:
+    Screen:
+        name: "S1"
+        BoxLayout:
+            orientation: "vertical"
+            Label :
+                text: "Screen 1"
+                text_size: None, None
+            BoxLayout:
+                Button:
+                    text: "B1.1 - Go to Images"
+                    on_press: root.push("S2")
+                Button:
+                    text: "B1.2 - Go to S3"
+                    on_press: root.push("S3")
+
+    Screen:
+        name: "S2"   # display ImagesSample & ActionBar
+        BoxLayout:
+            orientation: "vertical"
+            ActionBar:
+                ActionView:
+                    ActionPrevious:
+                        title: "Images - Screen 2"
+                        on_release: root.pop()
+                        app_icon: "images\lab_logo.png"
+                        app_icon_height: "28dp"
+                        app_icon_width: "28dp"
+            ImagesSample:
+
+    Screen:
+        name: "S3"
+        BoxLayout:
+            orientation: "vertical"
+            Label:
+                text: "Screen 3"
+            Button:
+                text: "B3 (back to S1)"
+                on_press: root.pop()
+
+
+#2 - Screen Manager (mode: push/pop)
+#  MyStackedScreenManager:
+
+<MyStackedScreenManager@ScreenManagerPushPop>:
+    Screen:
+        name: "S1"
+        Button:
+            text: "B1 of S1 (Go to S2)"
+            on_press: root.push("S2")
+    Screen:
+        name: "S2"
+        BoxLayout:
+            Button:
+                text: "B2.1 of S2 (Go to S3)"
+                on_press: root.push("S3")
+            Button:
+                text: "B2.2 of S2 (Back to S1)"
+                on_press: root.pop()
+
+    Screen:
+        name: "S3"
+        Button:
+            text: "B3 of S3 (Back to S2)"
+            on_press: root.pop()
+
+
+
+
+#1 - Screen Manager (mode: current)
+#MyScreenManager:
+
+<MyScreenManager@ScreenManager>:
+    Screen:
+        name: "S1"
+        Button:
+            text: "B1"
+            on_press: root.transition.direction = 'right' ; root.current = "S2"
+    Screen:
+        name: "S2"
+        Button:
+            text: "B2"
+            on_press: root.transition.direction = 'left' ; root.current = "S3"
+    Screen:
+        name: "S3"
+        Button:
+            text: "B3"
+            on_press: root.current = "S1"
+            on_press: root.transition.direction = 'left' ; root.current = root.previous()
+
+
+#0 - Code Modulaire
+#ImagesSample:
+#MainWidget2:
+#MainPageLayout:
+
+
+
