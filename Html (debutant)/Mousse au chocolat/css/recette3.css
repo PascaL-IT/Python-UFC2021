@@ -1,0 +1,253 @@
+/* Overflow Wizard */
+* {
+  overflow: auto;
+}
+
+
+/* Global */
+body {
+  background-color: #8ba1bb;
+  font-family: Arial;
+  margin: 2%;
+  padding: 0px;
+}
+
+h1 {
+  text-align: center;
+  font-family: Arial;
+  padding: 20px 5% 20px 5%;
+  margin-bottom: 10px;
+}
+
+h2 {
+  padding: 2px;
+  margin : 2px;
+}
+
+pre {
+  padding: 2px;
+  margin : 2px;
+}
+
+h2#surtitre {
+  background-color: #000000;
+  color: #ffffff;
+  text-align: center;
+  max-width: 100px; 
+  padding: 5px 5% 5px 5%;
+  display: inline-block;
+  margin-bottom: 0px;
+}
+
+h3 {
+  font-family: "Times New Roman", Times, serif;
+}
+
+h3#special {
+  /* text-align: center; */
+  display: inline-block;
+  /* max-width: 400px; */
+  margin-bottom: 50px;
+}
+
+table {
+  /* background-color: #6C829D80; */
+  border-collapse: collapse; /* supprimer les espaces entre th, td*/
+  width: 100%;
+  position: absolute;
+  bottom: 0px;
+  background-color: #6c829dc0; /* avec C0 */
+}
+
+th,
+td {
+  width: 25%;
+  padding: 4px;
+  text-align: center;
+  font-size: 12px;
+  color: white;
+  vertical-align: bottom;
+}
+
+
+/* DIV */
+div.centre {
+  text-align: center;
+  /* background-color: red; */
+}
+
+div.descendre {
+  margin-bottom: -20px;
+}
+
+div#separateur {
+  width: 100px;
+  height: 1px;
+  background-color: black;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+div.laFin {
+  color: chocolate;
+  font-size: 26px;
+  font-weight: 900;
+  font-family: "Calibri";
+  margin: 10px 10%;
+}
+
+div.colonne h2 pre {
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 14px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-style: normal;
+  border-bottom: 5px #6c829d solid;
+  padding: 4px;
+}
+
+
+/* IMAGES */
+img.icon {
+  /* display: block; */
+  min-width: 15px;
+  min-height: 15px;
+  max-height: 15px;
+  /* background-color: lightgray; */
+}
+
+img.style {
+  display: block;
+  width: 100%;
+  min-width: 250px;
+  min-height: 200px;
+  max-height: 600px;
+  background-color: lightgray;
+  object-fit: cover; /* scale-down; */
+}
+
+
+/* Unordered list with dynamic counter */
+ul {
+  list-style: none; /* list-style-image: url('remarque.png'); */
+  line-height: 20px;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: left;
+}
+
+
+/* Ordered list with dynamic counter */
+ol {
+  list-style: none;
+  counter-reset: my-counter;
+  line-break: 4px;
+  margin: 0px;
+  padding: 0px 20px 0px 20px;
+}
+
+ol li {
+  counter-increment: my-counter;
+  margin: 5px;
+  padding: 10px;
+  background: #6c829d50;
+  border-radius: 30%;
+}
+
+ol li::before {
+  content: counter(my-counter) ". ";
+  color: 6c829d;
+  font-weight: bold;
+}
+
+
+/* MAIN CLASSES */
+.contenu {
+  background-color: white;
+  box-shadow: 5px 5px 5px lightgray;
+  margin: 0px 5px 40px 5px;
+  padding: 10px 5% 10px 5%;
+}
+
+.ingredient {
+  /* background-color: lightsalmon; */
+  /* display: inline-block; */
+  margin-right: 2%;
+  margin: 0px;
+}
+
+.preparation {
+  /* background-color: lightpink; */
+  /* float: right; */
+  margin-left: 2%;
+  margin: 0px;
+}
+
+.colonne {
+  width: 100%;
+  font-family: "Times New Roman", Times, serif;
+  font-style: oblique;
+  margin-top: 2px;
+}
+
+
+/* RWD styles for PC_Computer */
+@media screen and (min-width: 768px) {
+
+  body {
+    margin: 5% 20% 5% 20%;
+  }
+
+  ul {
+    line-height: 40px;
+    font-size: 20px;
+  }
+
+  div.colonne {
+    margin-top: 20px;
+  }
+
+  table {
+    background-color: #6c829d40; /* avec 40 */
+  }
+
+  th,
+  td {
+    padding: 5px;
+    font-size: 12px;
+  }
+
+  th {
+    border-bottom: chocolate 1px solid;
+  }
+
+  .ingredient {
+    /* background-color: lightsalmon; */
+    display: inline-block;
+    margin-right: 2%;
+  }
+  
+  .preparation {
+    /* background-color: lightpink; */
+    float: right;
+    margin-left: 2%;
+  }
+
+  img.icon {
+    max-height: 25px;
+  }
+
+  .colonne {
+    width: 48%; /* 2 x 48 + 2 x 2% */
+  }
+
+  /* Other behavior with large screen */
+  @media screen and (min-width: 1024px) {
+    .contenu {
+      margin-left: auto;
+      margin-right: auto;
+      max-width: 1024px;
+    }
+  }
+
+}
