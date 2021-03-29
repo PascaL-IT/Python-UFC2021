@@ -1,0 +1,81 @@
+#:import t track
+#:import pi play_indicator
+
+MainWidget:
+
+<MainWidget>:
+    tracks_layout: track_widgets_id
+    play_indicator_widget : play_indicator_widget_id
+
+    BoxLayout:
+        orientation: "vertical"
+
+        BoxLayout:
+            size_hint_y: None  # manual height
+            height: dp(40)
+
+            HiddenControlButton:
+                width: root.button_width_lalign
+
+            PlayStopControlButton:
+                text: root.play_stop_label  # PLAY or STOP
+                on_press: root.play_stop_audio()
+                background_color: root.play_stop_color
+
+            HiddenControlButton:
+                width: dp(250)
+
+            BpmLabel:
+                text: "BPM : "
+            BpmControlButton:
+                on_press: root.update_bpm(self.text)
+                on_release: root.stop_and_change_bpm()
+                text: "-"
+                state: 'normal'
+                background_color: root.a_red_color
+            BpmLabel:
+                text: root.bpm_value_label
+            BpmControlButton:
+                on_press: root.update_bpm(self.text)
+                on_release: root.stop_and_change_bpm()
+                text: "+"
+                background_color: root.a_green_color
+
+        PlayIndicatorWidget:
+            id: play_indicator_widget_id
+            size_hint_y: None  # manual height
+            height: dp(15)
+
+        BoxLayout:
+            id: track_widgets_id
+            orientation: "vertical"
+            # list of TrackWidget ...
+
+<HiddenControlButton@Button>:
+    size_hint_x: None
+    text: ""
+    disabled: True
+    border: (0,0,0,0)
+    background_color: (0, 0, 0, 1)
+    background_normal: ''
+    background_disabled_normal: ''
+    # background_down: ''
+    # background_disabled_down: ''
+
+<BpmControlButton@Button>:
+    size_hint_x: None
+    width: dp(40)
+    border: (2,2,2,2)
+    always_release: True
+
+<BpmLabel@Label>:
+    size_hint_x: None
+    width: dp(50)
+    border: (2,2,2,2)
+
+<PlayStopControlButton@Button>:
+    border: (0,0,0,0)
+    size_hint_x: None
+    width: dp(180)
+    #background_normal: ''
+

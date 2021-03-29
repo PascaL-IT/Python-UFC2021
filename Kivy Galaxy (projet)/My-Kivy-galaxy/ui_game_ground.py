@@ -1,4 +1,4 @@
-# Project "GALAXY" - version 2 - UI GAME GROUND
+# Project "GALAXY" - version 3 - UI GAME GROUND
 from random import randint
 
 from kivy.core.text import Label
@@ -6,7 +6,7 @@ from kivy.graphics.context_instructions import Color
 from kivy.graphics.vertex_instructions import Quad
 
 """ UI TILE VARIABLES """
-NBR_INIT_TILES = 9
+NBR_INIT_TILES = 6
 tiles_quad = []
 tiles_coordinates = []
 
@@ -14,23 +14,15 @@ tiles_coordinates = []
 
 
 def init_tiles(self):
+    self.tiles_quad.clear()
+    self.tiles_coordinates.clear()
     with self.canvas:
         Color(1, 1, 1)
-        for t in range(0, NBR_INIT_TILES):
-            Color(1 - t / 5, 1 - t / 10, 1 - t / 20)
-            self.tiles_quad.append(Quad())  # TODO ... ajouter une texture ou label avec n° ... ?! How to !?
-        print(f"init_tiles -> nbr. of tiles={len(self.tiles_quad)}")
-    self.generate_1rst_tiles_coordinates()
-
-
-""" Generate Tiles Coordinates """
-
-
-def generate_1rst_tiles_coordinates(self):
-    for i in range(0, NBR_INIT_TILES):
-        self.tiles_coordinates.append((0, i))
-    print(f"generate_1rst_tiles_coordinates -> len={len(self.tiles_coordinates)} -> {self.tiles_coordinates}")
-
+        for i in range(0, NBR_INIT_TILES):
+            # Color(1 - t / 5, 1 - t / 10, 1 - t / 20)
+            self.tiles_quad.append(Quad(points = [0, 0, 0, 0, 0, 0, 0, 0]))  # TODO ... ajouter unlabel avec n° ... ?! How to !?
+            self.tiles_coordinates.append((0, i))
+        print(f"init_tiles -> nbr. of tiles/quad={len(self.tiles_quad)}")
 
 """ Generate Tiles Game Path """
 
@@ -91,11 +83,16 @@ def compute_tile_point_corner(self, linev_id, lineh_id):
 
 
 def update_tiles(self, y_path_step):
-    # quads and tiles_coordinates numbers must be the same
+    # quads and tiles_coordinates must be the same quantity
     diff_nbr = len(self.tiles_coordinates) - len(self.tiles_quad)
-    if diff_nbr >= 0:
+    if diff_nbr > 0:
+        #print(f"DEBUG - update_tiles : diff_nbr={diff_nbr}")
         for i in range(0, diff_nbr):
             self.tiles_quad.append(Quad())  # add quad
+    if diff_nbr < 0:
+        #print(f"DEBUG - update_tiles : diff_nbr={diff_nbr}")
+        for i in range(0, abs(diff_nbr)):
+            self.tiles_quad.pop(-1)  # remove quad
     # update tiles
     for i, tq in enumerate(self.tiles_quad, start=0):
         tc = self.tiles_coordinates[i]
@@ -117,7 +114,8 @@ def update_tiles(self, y_path_step):
             tq.points = [0, 0, 0, 0, 0, 0, 0, 0]
             if self.IS_DEBUG_ENABLE:
                 print(f"DEBUG - update_tiles[{i}]: TOUCH BOUNDARIES")
-                print(f"DEBUG - update_tiles[{i}]: MIN(h={line_h_min},v={line_v_min}) MAX(h={line_h_max},v={line_v_max})")
+                print(f"DEBUG - update_tiles[{i}]: MIN - h={line_h_min} , v={line_v_min}")
+                print(f"DEBUG - update_tiles[{i}]: MAX - h={line_h_max} , v={line_v_max}")
             return  # quit loop
 
         if self.IS_DEBUG_ENABLE:
@@ -126,3 +124,5 @@ def update_tiles(self, y_path_step):
             print(f"DEBUG - update_tiles[{i}]: lines(vmin,hmin)=({line_v_min},{line_h_min})")
             print(f"DEBUG - update_tiles[{i}]: lines(vmax,hmax)=({line_v_max},{line_h_max})")
             print(f"DEBUG - update_tiles[{i}]: tile.points={tq.points}\n")
+
+

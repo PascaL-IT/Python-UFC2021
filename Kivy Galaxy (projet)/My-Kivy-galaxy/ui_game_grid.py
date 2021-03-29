@@ -1,7 +1,9 @@
-# Project "GALAXY" - version 2 - UI GAME GRID
+# Project "GALAXY" - version 3 - UI GAME GRID
 from kivy.graphics.context_instructions import Color
 from kivy.graphics.vertex_instructions import Line, Triangle
 import math
+
+from kivy.properties import ObjectProperty
 
 """ UI GRID PARAMETERS """
 IS_PERSPECTIVE = True  # Default is True (vs. False => 2D)
@@ -10,12 +12,12 @@ POW_FACTOR_PERSPECTIVE = 2  # Y-power factor of penetration, e.g. 2
 NBR_FACTOR_PERSPECTIVE = 1  # start number for factor, e.g. 0.9 , 1 , 1.2
 
 V_NBR_LINES = 16  # nbr. of lines drawn on the screen (must be an EVEN number to center the path)
-V_SPC_LINES = 0.20  # spacing of vertical line in % (screen width)
+V_SPC_LINES = 0.15  # spacing of vertical line in % (screen width)
 
-H_NBR_LINES = 12  # nbr. of lines drawn on the screen
+H_NBR_LINES = 10  # nbr. of lines drawn on the screen
 H_SPC_LINES = 0.25  # spacing of horizontal line in % (screen height)
 
-SPEED_FPS = 75  # clock update speed, e.g. 60 FPS
+SPEED_FPS = 60  # clock update speed, e.g. 60 FPS
 SPEED_Y = 1.0  # Y-vertical speed increment, e.g. 1.0    (fct of height)
 SPEED_X = 1.0  # X-horizontal speed increment, e.g. 2.0  (fct of width)
 
@@ -29,8 +31,8 @@ vertical_lines = []  # list of vertical lines
 speed_touch = 0  # parameter to manage the motion on screen touch
 current_offset_y = 0  # parameter to manage the grid scrolling down
 current_offset_x = 0  # parameter to manage the grid moving left or right
-ship = None  # ship object
-ship_coordinates = []
+speed_score_step = 50 # speed increase threshold by score, e.g. each 50 points
+game_level = 1 # levels : 1 for easy, 2 for difficult
 
 """ Initialisation of lines (called by constructor) """
 
@@ -147,14 +149,18 @@ def compute_perspective_hlines(self):
 def update_offsets(self, speed_factor, spacing_y):
     # Update the current offset_x for X-grid-animation (left <-> right)
     self.current_offset_x -= self.speed_touch * speed_factor
-    # Update the current offset_y to allow Y-grid-animation (up <-> down)
+    # Update the current offset_y for Y-grid-animation (up <-> down)
     self.current_offset_y -= self.SPEED_Y / 100 * self.height * speed_factor
     # Check current offset_y to allow Y-grid infinie looping
     if abs(self.current_offset_y) >= spacing_y:
+        # while abs(self.current_offset_y) >= spacing_y:
         self.current_offset_y += spacing_y  # jump back to the upper line (!!! TIP !!!)
         # Update the score
         self.score_game += 1
-        print(f"score_game={self.score_game}")
+        # Increase the speed during the ride
+        if self.score_game % 50 == 0:
+            self.SPEED_X += 0.05
+            self.SPEED_Y += 0.1
         # Increase list of tiles_coordinates on condition
         self.generate_new_tiles_game_path(self.score_game)
 
@@ -165,23 +171,28 @@ def update_offsets(self, speed_factor, spacing_y):
 def init_ship(self):
     print(f"init_ship")
     with self.canvas:
-        Color(0, 1, 0)
-        self.ship = Triangle()
-
+        Color(self.ship_color_rgb[0], self.ship_color_rgb[1], self.ship_color_rgb[2])
+        self.ship = Triangle(points = [0,0,0,0,0,0])
 
 """ Update the black ship """
 
 
 def update_ship(self):
     print(f"update_ship")
-    x1 = self.width * 0.5 * (1 - self.SHIP_WIDTH)
+    if game_level == 2 :
+        sw = self.SHIP_WIDTH * 0.8 # reduce width on level 2
+        print(f"update_ship: new width={round(sw,2)} on level 2")
+    else:
+        sw = self.SHIP_WIDTH
+    x1 = self.width * 0.5 * (1 - sw)
     y1 = self.SHIP_BASE_Y * self.height
     x2 = self.width * 0.5
     y2 = (self.SHIP_BASE_Y + self.SHIP_HEIGHT) * self.height
-    x3 = self.width * 0.5 * (1 + self.SHIP_WIDTH)
+    x3 = self.width * 0.5 * (1 + sw)
     y3 = y1
     self.ship.points = [int(x1), int(y1), int(x2), int(y2), int(x3), int(y3)]
-    print(f"DEBUG - update_ship: points={self.ship.points}")
+    if self.IS_DEBUG_ENABLE:
+        print(f"update_ship: new points={self.ship.points}")
 
 
 """ Check how many points of a ship are within a tile boundaries """
@@ -195,7 +206,7 @@ def check_ship_points_in_tile(self, tq, is_totally_in):
     for i in range(0, len(self.ship.points), 2):
         if is_totally_in:
             delta_xl = 10 + 3 * self.SPEED_X  # compensation add a few %errors on the righy
-            delta_xr = delta_xl + 8 # compensation add a few %errors on the left (asymmetric)
+            delta_xr = delta_xl + 8  # compensation add a few %errors on the left (asymmetric)
         else:
             delta_xl = delta_xr = 0
         sx = self.ship.points[i]
@@ -204,7 +215,7 @@ def check_ship_points_in_tile(self, tq, is_totally_in):
             result += 1  # true (+1) if point present in the tile/quad
     if self.IS_DEBUG_ENABLE:
         print(
-            f"DEBUG: check_ship_points_in_tile[{i}]: {tx1 - delta_xl }<={sx}<={tx3 + delta_xr} ({tx1 - delta_xl <= sx <= tx3 + delta_xr}) {ty1}<={sy}<={ty3} ({ty1 <= sy <= ty3})")
+            f"DEBUG: check_ship_points_in_tile[{i}]: {tx1 - delta_xl}<={sx}<={tx3 + delta_xr} ({tx1 - delta_xl <= sx <= tx3 + delta_xr}) {ty1}<={sy}<={ty3} ({ty1 <= sy <= ty3})")
         print(f"DEBUG: check_ship_points_in_tile - result={result} with tq={tq.points} and ship={self.ship.points}")
     return result
 
@@ -212,15 +223,16 @@ def check_ship_points_in_tile(self, tq, is_totally_in):
 """ Check if ship is on path of tiles """
 
 
-def check_ship_on_path_tiles(self, spacing_y, is_low_tolerance=True):
+def check_ship_on_path_tiles(self, spacing_y, is_low_tolerance = False):
+    if self.game_level == 2 :
+        is_low_tolerance = True
     results = []  # store booleans
     # Loop on the two bottom lines of quads
     for i, tq in enumerate(self.tiles_quad):
         # Exit loop when tile is not part of the two bottom lines
-        if tq.points[3] > spacing_y * 2 + 1 :
+        if tq.points[3] > spacing_y * 2 + 1:
             break
         # Check if the ship has at least one coordinates in a quad
-        # print(f"DEBUG: check_ship_collision_with_tiles[{i}]")
         results.append(self.check_ship_points_in_tile(tq, is_low_tolerance))
     # Check results
     result = False
@@ -230,6 +242,7 @@ def check_ship_on_path_tiles(self, spacing_y, is_low_tolerance=True):
         result = True
 
     if self.IS_DEBUG_ENABLE:
-        print(f"DEBUG: check_ship_collision_with_tiles: low_tolerance={is_low_tolerance} , result={result} with {results}")
+        print(
+            f"DEBUG: check_ship_collision_with_tiles: low_tolerance={is_low_tolerance} , result={result} with {results}")
 
     return result

@@ -1,4 +1,4 @@
-# Project "GALAXY" - version 2 - DEBUG
+# Project "GALAXY" - version 3 - DEBUG
 
 """ For DEBUGGING & TUNING """
 from matplotlib import pyplot as plt

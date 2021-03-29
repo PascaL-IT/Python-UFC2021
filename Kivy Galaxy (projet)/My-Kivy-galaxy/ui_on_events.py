@@ -1,9 +1,12 @@
-# Project "GALAXY" - version 2 - UI ON EVENTS
+# Project "GALAXY" - version 3 - UI ON EVENTS
 
 """ On parent widget available """
+from kivy.uix.relativelayout import RelativeLayout
+
 
 def on_parent(self, widget, parent):
     print("on_parent - W: " + str(self.width) + " - H: " + str(self.height))
+    self.audio_galaxy.play()
 
 
 """ On re-size """
@@ -44,22 +47,25 @@ def on_request_close(self, *args):
 
 def on_touch_down(self, touch):
     print(f"on_touch_down -> ...")
-    speed_x = self.SPEED_X / 100 * self.width
-    if touch.x < self.width / 2:
-        print(f"on_touch_down -> LEFT (<=) ")
-        self.speed_touch -= speed_x
-    else:
-        print(f"on_touch_down -> RIGHT (=>) ")
-        self.speed_touch += speed_x
-
+    if not self.state_game_over and self.state_game_start:
+        speed_x = self.SPEED_X / 100 * self.width
+        if touch.x < self.width / 2:
+            print(f"on_touch_down -> LEFT (<=) ")
+            self.speed_touch -= speed_x
+        else:
+            print(f"on_touch_down -> RIGHT (=>) ")
+            self.speed_touch += speed_x
+    return super(RelativeLayout, self).on_touch_down(touch)
 
 """ On touch up (click on screen) """
 
 
 def on_touch_up(self, touch):
-    print(f"on_touch_up -> UP (=)")
-    self.speed_touch = 0
-
+    print(f"on_touch_up -> ...")
+    if not self.state_game_over and self.state_game_start:
+        print(f"on_touch_up -> UP (=)")
+        self.speed_touch = 0
+    return super(RelativeLayout, self).on_touch_up(touch)
 
 """ On keyboard closed """
 

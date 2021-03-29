@@ -1,17 +1,45 @@
-# Project "GALAXY" - version 1 - KV
+# Project "GALAXY" - version 3 - GALAXY KV
+#:import m menu
 
 MainWidget:
 
 <MainWidget>:
     perspective_point_x: self.width * 0.5
     perspective_point_y: self.height * self.Y_POS_PERSPECTIVE
+    menu_start: menu_start_id
 
-    canvas:
-        Color:
-            rgba: 1, 0, 0, 1
-        Line:
-            points: (self.width/2, 0, self.width/2, 2)
-            width: 2
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: 'images/bg1.jpg'
+
+    MainMenu:
+        id: menu_start_id
+
+    Label:
+        font_size: dp(26)
+        font_name: "fonts/Eurostile.ttf"
+        text: root.label_score
+        pos_hint: { "x" : 0, "top" : 1 }
+        size_hint: 0.2 , 0.2
+
+    Label:
+        font_size: dp(16)
+        font_name: "fonts/Eurostile.ttf"
+        text: root.label_parameters
+        pos_hint: { "x" : 0, "top" : .90 }
+        size_hint: 0.2 , 0.2
+
+
+    #canvas:
+    #    Color:
+    #        rgba: 1, 1, 0, 1
+    #    Line:
+    #        points: (self.width/2, 0, self.width/2, 2)
+    #        width: 2
+
+
 
 
 
