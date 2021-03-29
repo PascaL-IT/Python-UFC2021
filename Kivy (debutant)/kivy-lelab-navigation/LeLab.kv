@@ -1,0 +1,40 @@
+#:import layout_exemples layout_exemples
+#:import widget_exemples widget_exemples
+#:import navigation_screen_manager navigation_screen_manager
+#:import boxlayout_with_action_bar boxlayout_with_action_bar
+
+
+<MenuPrincipal@BoxLayout>:
+    orientation: "vertical"
+    Button:
+        text: "Layouts"
+        on_press: app.manager.push("LayoutExemplesTabs")
+    Button:
+        text: "Widgets"
+        on_press: app.manager.push("WidgetsExemple")
+    Button:
+        text: "Images"
+        on_press: app.manager.push("ImagesExemple")
+
+<MyScreenManager>:
+    Screen:
+        name: "MenuPrincipal"
+        MenuPrincipal:
+    Screen:
+        name: "LayoutExemplesTabs"
+        BoxLayoutWithActionBar:
+            title: "Layouts"
+            LayoutExemplesTabs:
+    Screen:
+        name: "WidgetsExemple"
+        BoxLayoutWithActionBar:
+            title: "Widgets"
+            WidgetsExemple:
+    Screen:
+        name: "ImagesExemple"
+        BoxLayoutWithActionBar:
+            title: "Images"
+            ImagesExemple:
+
+
+
