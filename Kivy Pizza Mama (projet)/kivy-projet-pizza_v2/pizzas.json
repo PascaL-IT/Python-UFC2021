@@ -1,0 +1,1 @@
+[{"nom": "4 fromages", "ingredients": "Emmental, Brie, Reblochon, Comt\u00e9", "prix": 8.5, "vegetarienne": true}, {"nom": "Hawai", "ingredients": "ananas, tomate, oeuf", "prix": 12.5, "vegetarienne": false}, {"nom": "Carnivore", "ingredients": "Boeuf, porc", "prix": 14.99, "vegetarienne": false}]

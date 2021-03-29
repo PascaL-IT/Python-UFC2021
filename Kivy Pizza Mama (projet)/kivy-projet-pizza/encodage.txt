@@ -1,0 +1,7 @@
+with open("pizzascr.kv", encoding='utf8') as f:
+    Builder.load_string(f.read())
+
+
+class PizzaApp(App):
+    def build(self):
+        return MainWidget()
