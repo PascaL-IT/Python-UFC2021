@@ -14,7 +14,6 @@ def on_size(self, *args):
     self.update_ship()
     # self.perspective_point_x = self.width * 0.5                            # move in kv : X position at 50% screen width (always)
     # self.perspective_point_y = self.height * self.Y_POS_PERSPECTIVE        # move in kv : Y position at a % of screen height
-    # self.update_lines(self.perspective_point_x, self.perspective_point_y)  # move to the 'update' function
 
 
 """ On perspective_point_x """

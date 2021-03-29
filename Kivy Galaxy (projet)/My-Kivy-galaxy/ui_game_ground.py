@@ -15,6 +15,7 @@ tiles_coordinates = []
 
 def init_tiles(self):
     with self.canvas:
+        Color(1, 1, 1)
         for t in range(0, NBR_INIT_TILES):
             Color(1 - t / 5, 1 - t / 10, 1 - t / 20)
             self.tiles_quad.append(Quad())  # TODO ... ajouter une texture ou label avec n° ... ?! How to !?
@@ -95,15 +96,7 @@ def update_tiles(self, y_path_step):
     if diff_nbr >= 0:
         for i in range(0, diff_nbr):
             self.tiles_quad.append(Quad())  # add quad
-    """
-    else:
-        for i in range(0, abs(diff_nbr)):
-            self.tiles_quad.pop(0)  # delete last quad
-    diff_nbr = len(self.tiles_coordinates) - len(self.tiles_quad)
-    if diff_nbr != 0:
-        print(f"DEBUG - update_tiles: diff_nbr = tc - tq ={diff_nbr}")
-        raise ("Technical error... (quit game - bug?)")
-    """
+    # update tiles
     for i, tq in enumerate(self.tiles_quad, start=0):
         tc = self.tiles_coordinates[i]
         # Retrieve indexes of vertical and horizontal lines
@@ -123,8 +116,8 @@ def update_tiles(self, y_path_step):
         else:
             tq.points = [0, 0, 0, 0, 0, 0, 0, 0]
             if self.IS_DEBUG_ENABLE:
-                print(
-                    f"DEBUG -  update_tiles[{i}]: TOUCH BOUNDARIES - MIN(h={line_h_min},v={line_v_min}) - MAX(h={line_h_max},v={line_v_max})")
+                print(f"DEBUG - update_tiles[{i}]: TOUCH BOUNDARIES")
+                print(f"DEBUG - update_tiles[{i}]: MIN(h={line_h_min},v={line_v_min}) MAX(h={line_h_max},v={line_v_max})")
             return  # quit loop
 
         if self.IS_DEBUG_ENABLE:

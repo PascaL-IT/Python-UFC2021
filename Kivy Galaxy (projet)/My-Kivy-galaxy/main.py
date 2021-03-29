@@ -16,7 +16,8 @@ class MainWidget(Widget):
     from ui_game_grid import init_vertical_lines, init_horizontal_lines, update_lines, compute_perspective_vlines, \
         compute_perspective_hlines, update_offsets, V_NBR_LINES, vertical_lines, H_NBR_LINES, horizontal_lines, \
         SPEED_FPS, Y_POS_PERSPECTIVE, \
-        V_SPC_LINES, H_SPC_LINES, init_ship, update_ship, ship, SHIP_WIDTH, SHIP_HEIGHT, SHIP_BASE_Y
+        V_SPC_LINES, H_SPC_LINES, init_ship, update_ship, ship, SHIP_WIDTH, SHIP_HEIGHT, SHIP_BASE_Y, \
+        check_ship_on_path_tiles, check_ship_points_in_tile
     from ui_game_grid import current_offset_x, current_offset_y, IS_PERSPECTIVE, NBR_FACTOR_PERSPECTIVE, \
         POW_FACTOR_PERSPECTIVE, SPEED_Y, SPEED_X
     from ui_game_grid import speed_touch
@@ -34,7 +35,7 @@ class MainWidget(Widget):
 
     def __init__(self, **kwargs):
         super(MainWidget, self).__init__(**kwargs)
-        Window.size = (900, 500)
+        Window.size = (1200, 600)
         Window.bind(on_request_close=self.on_request_close)
         self.init_vertical_lines()
         self.init_horizontal_lines()
@@ -65,13 +66,19 @@ class MainWidget(Widget):
         speed_factor = dt * self.SPEED_FPS  # clock speed_factor value has a value around ~1.0
 
         # Update the lines of the grid
-        self.update_lines(self.perspective_point_x, self.perspective_point_y, spacing_x, spacing_y)
+        self.update_lines(spacing_x, spacing_y)
 
         # Update the tiles for the ground
         self.update_tiles(self.score_game)
 
         # Update the offsets for X and Y animations of the grid
         self.update_offsets(speed_factor, spacing_y)
+
+        # Check ship position on the path
+        if not self.check_ship_on_path_tiles(spacing_y):
+            message_go = "GAME OVER"
+            print(message_go + " - score: " + str(self.score_game))
+            raise TypeError(message_go)  # TODO ...
 
         if self.IS_DEBUG_ENABLE:
             print(

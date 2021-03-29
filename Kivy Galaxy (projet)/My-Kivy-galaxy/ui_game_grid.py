@@ -9,17 +9,17 @@ Y_POS_PERSPECTIVE = 0.75  # Y-position at a % of screen height, e.g 0.75
 POW_FACTOR_PERSPECTIVE = 2  # Y-power factor of penetration, e.g. 2
 NBR_FACTOR_PERSPECTIVE = 1  # start number for factor, e.g. 0.9 , 1 , 1.2
 
-V_NBR_LINES = 8  # nbr. of lines drawn on the screen (must be an EVEN number to center the path)
-V_SPC_LINES = 0.10  # spacing of vertical line in % (screen width)
+V_NBR_LINES = 16  # nbr. of lines drawn on the screen (must be an EVEN number to center the path)
+V_SPC_LINES = 0.20  # spacing of vertical line in % (screen width)
 
-H_NBR_LINES = 10  # nbr. of lines drawn on the screen
-H_SPC_LINES = 0.20  # spacing of horizontal line in % (screen height)
+H_NBR_LINES = 12  # nbr. of lines drawn on the screen
+H_SPC_LINES = 0.25  # spacing of horizontal line in % (screen height)
 
-SPEED_FPS = 60  # clock update speed, e.g. 60 FPS
-SPEED_Y = 1.0  # Y-vertical speed increment, e.g. 1.0    (fct of width)
-SPEED_X = 2.0  # X-horizontal speed increment, e.g. 2.0  (fct of height)
+SPEED_FPS = 75  # clock update speed, e.g. 60 FPS
+SPEED_Y = 1.0  # Y-vertical speed increment, e.g. 1.0    (fct of height)
+SPEED_X = 1.0  # X-horizontal speed increment, e.g. 2.0  (fct of width)
 
-SHIP_WIDTH = 0.08  # ship width in % a % of screen width
+SHIP_WIDTH = 0.07  # ship width in % a % of screen width
 SHIP_HEIGHT = 0.03  # ship height in % a % of screen height
 SHIP_BASE_Y = 0.04  # distance of ship from the Y-bottom
 
@@ -30,6 +30,7 @@ speed_touch = 0  # parameter to manage the motion on screen touch
 current_offset_y = 0  # parameter to manage the grid scrolling down
 current_offset_x = 0  # parameter to manage the grid moving left or right
 ship = None  # ship object
+ship_coordinates = []
 
 """ Initialisation of lines (called by constructor) """
 
@@ -62,7 +63,7 @@ def init_horizontal_lines(self):
 """ Update of lines (called by on_size) """
 
 
-def update_lines(self, px, py, spacing_x, spacing_y):
+def update_lines(self, spacing_x, spacing_y):
     # Vertical lines in 2D
     offset_x = int(self.V_NBR_LINES * 0.5) * -1  # from left and go to the right
     for l in range(0, self.V_NBR_LINES):  # update line coordinates (points)
@@ -137,8 +138,7 @@ def compute_perspective_hlines(self):
             alpha_deg = round(math.atan(a1) * (180 / math.pi), 1)
             print(f"DEBUG - [{i}] compute_perspective_hlines: alpha={alpha_deg}°")
             print(f"DEBUG - [{i}] compute_perspective_hlines: factor_y={factor_y} is_visible={is_visible}")
-            print(
-                f"DEBUG - [{i}] compute_perspective_hlines: (x1,y1)=({int(x1)},{int(y1)}) (x2,y2)=({int(x2)},{int(y2)})")
+            print(f"DEBUG - [{i}] compute_perspective_hlines: ({int(x1)},{int(y1)}) , ({int(x2)},{int(y2)})")
 
 
 """ Update of offset x & y for animations (called by update) """
@@ -165,7 +165,7 @@ def update_offsets(self, speed_factor, spacing_y):
 def init_ship(self):
     print(f"init_ship")
     with self.canvas:
-        Color(0, 0, 0)
+        Color(0, 1, 0)
         self.ship = Triangle()
 
 
@@ -180,4 +180,56 @@ def update_ship(self):
     y2 = (self.SHIP_BASE_Y + self.SHIP_HEIGHT) * self.height
     x3 = self.width * 0.5 * (1 + self.SHIP_WIDTH)
     y3 = y1
-    self.ship.points = [x1, y1, x2, y2, x3, y3]
+    self.ship.points = [int(x1), int(y1), int(x2), int(y2), int(x3), int(y3)]
+    print(f"DEBUG - update_ship: points={self.ship.points}")
+
+
+""" Check how many points of a ship are within a tile boundaries """
+
+
+def check_ship_points_in_tile(self, tq, is_totally_in):
+    # Retrieve tile/quad coordinates (rem. tx3 = tx4 , ty2 = ty3 , ty1 = ty4)
+    tx1, ty1, tx2, ty2, tx3, ty3, tx4, ty4 = tq.points
+    # Check each ship point (x,y) is in the tile area (rem. sy1 = sy3)
+    result = 0
+    for i in range(0, len(self.ship.points), 2):
+        if is_totally_in:
+            delta_xl = 10 + 3 * self.SPEED_X  # compensation add a few %errors on the righy
+            delta_xr = delta_xl + 8 # compensation add a few %errors on the left (asymmetric)
+        else:
+            delta_xl = delta_xr = 0
+        sx = self.ship.points[i]
+        sy = self.ship.points[i + 1]
+        if tx1 - delta_xl <= sx <= tx3 + delta_xr and ty1 <= sy <= ty3:
+            result += 1  # true (+1) if point present in the tile/quad
+    if self.IS_DEBUG_ENABLE:
+        print(
+            f"DEBUG: check_ship_points_in_tile[{i}]: {tx1 - delta_xl }<={sx}<={tx3 + delta_xr} ({tx1 - delta_xl <= sx <= tx3 + delta_xr}) {ty1}<={sy}<={ty3} ({ty1 <= sy <= ty3})")
+        print(f"DEBUG: check_ship_points_in_tile - result={result} with tq={tq.points} and ship={self.ship.points}")
+    return result
+
+
+""" Check if ship is on path of tiles """
+
+
+def check_ship_on_path_tiles(self, spacing_y, is_low_tolerance=True):
+    results = []  # store booleans
+    # Loop on the two bottom lines of quads
+    for i, tq in enumerate(self.tiles_quad):
+        # Exit loop when tile is not part of the two bottom lines
+        if tq.points[3] > spacing_y * 2 + 1 :
+            break
+        # Check if the ship has at least one coordinates in a quad
+        # print(f"DEBUG: check_ship_collision_with_tiles[{i}]")
+        results.append(self.check_ship_points_in_tile(tq, is_low_tolerance))
+    # Check results
+    result = False
+    if is_low_tolerance and sum(results) >= len(self.ship.points) / 2:
+        result = True
+    elif not is_low_tolerance and sum(results) >= 1:
+        result = True
+
+    if self.IS_DEBUG_ENABLE:
+        print(f"DEBUG: check_ship_collision_with_tiles: low_tolerance={is_low_tolerance} , result={result} with {results}")
+
+    return result
