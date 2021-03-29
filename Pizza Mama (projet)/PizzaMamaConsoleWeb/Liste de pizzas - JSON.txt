@@ -1,0 +1,72 @@
+[
+	{
+		"model": "menu.pizza",
+		"pk": 7,
+		"fields": {
+			"nom": "Calzone",
+			"ingredients": "mozzarella, parmesan, jambon, tomates, sel, poivre, huile d'olive",
+			"prix": 13.4,
+			"vegetarienne": false
+		}
+	},
+	{
+		"model": "menu.pizza",
+		"pk": 2,
+		"fields": {
+			"nom": "Capricciosa",
+			"ingredients": "fromage mozzarella, jambon italien, champignons, artichauts, tomates, sel, poivre",
+			"prix": 12.0,
+			"vegetarienne": false
+		}
+	},
+	{
+		"model": "menu.pizza",
+		"pk": 4,
+		"fields": {
+			"nom": "Gaumaise",
+			"ingredients": "crème, mozzarella, saucisson gaumais, fromage d'Orval, oignons",
+			"prix": 14.5,
+			"vegetarienne": false
+		}
+	},
+	{
+		"model": "menu.pizza",
+		"pk": 5,
+		"fields": {
+			"nom": "Margherita",
+			"ingredients": "tomates, mozzarella, basilic frais, sel, huile d'olive",
+			"prix": 9.0,
+			"vegetarienne": true
+		}
+	},
+	{
+		"model": "menu.pizza",
+		"pk": 3,
+		"fields": {
+			"nom": "Quatre fromages",
+			"ingredients": "tomates, cheddar, comté, gorgonzola, mozzarella, basilic",
+			"prix": 11.85,
+			"vegetarienne": false
+		}
+	},
+	{
+		"model": "menu.pizza",
+		"pk": 6,
+		"fields": {
+			"nom": "Vulcano",
+			"ingredients": "mozzarella, chorizo, tomates, poivre, piments",
+			"prix": 9.85,
+			"vegetarienne": false
+		}
+	},
+	{
+		"model": "menu.pizza",
+		"pk": 1,
+		"fields": {
+			"nom": "Végétario",
+			"ingredients": "tomates, oignons, artichauts, origan",
+			"prix": 10.5,
+			"vegetarienne": true
+		}
+	}
+]
