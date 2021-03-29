@@ -1,0 +1,149 @@
+#: import utils kivy.utils
+#: set color1 "#DD7835"
+#: set color2 "#C8C8C8"
+
+MainWidget:
+
+<MainWidget>:
+    recycleView: rv1
+
+    CoverImage:
+        source: 'images/menu_background.jpg'
+        canvas:
+            Color:
+                rgba: 0, 0, 0, 0.4
+            Rectangle:
+                size: root.size
+
+    Label:
+        text: root.progressLabel
+        color: utils.get_color_from_hex(color1)
+        font_size: dp(20)
+        pos_hint: { "center_x" : .3 , "center_y" : .5 }
+        size_hint: .2 , .2
+        canvas.before:
+            Color:
+                rgba: (0,0,0,1) if len(self.text) else (1,1,1,0)
+            Ellipse:
+                pos: self.pos
+                size: self.size
+
+    BoxLayout:
+        orientation: "vertical"
+
+        Image:
+            source: 'images/small_logo.png'  # pizza mama
+            size_hint: None, None            # manual pos
+            size: dp(150), dp(60)
+            allow_stretch: True
+            pos_hint: { "center_x" : .5 }
+
+        Label:
+            text: "Les Pizzas"
+            font_size: dp(22)
+            bold: True
+            color: 1,1,1,1
+            size_hint: None, None            # manual pos
+            size: dp(120), dp(30)
+            padding: dp(20), dp(4)
+            canvas.before:
+                Color:
+                    rgba: utils.get_color_from_hex(color1)
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+
+        BoxLayout:
+            padding: dp(20), dp(20)
+            RV:                               # RecycleView
+                id: rv1
+                viewclass: 'PizzaWidget'
+                data: ""                      # [{'text': text} for text in self.items]
+                do_scroll: False, True
+                RecycleBoxLayout:
+                    default_size: None, dp(56)
+                    default_size_hint: 1, None
+                    size_hint_y: None
+                    height: self.minimum_height
+                    orientation: 'vertical'
+                    spacing: dp(16)           # space between RV items
+
+        Label:
+            text: root.error_or_failure_message    # visible label on error or failure
+            color: 1,1,1,1
+            font_size: dp(12)
+            bold: True
+            size_hint: 1 , None
+            height: dp(30) if len(root.error_or_failure_message) > 0 else 0
+            canvas.before:
+                Color:
+                    rgb: 1,0,0
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+
+
+<PizzaWidget>:
+    BoxLayout:
+        size_hint_max_x: dp(350)
+        size_hint_min_x: dp(200)
+        orientation: "vertical"
+        BoxLayout:
+            orientation: "horizontal"
+            FitLabel:
+                text: root.name
+                bold: True
+                font_size: dp(20)
+            BackgroundLabel:
+                background_color: (1,0.45,0,1) # if root.vegetarian else (0, 1, 0, 1)
+                text: "vegetarian" if root.vegetarian else ""
+                color: 0,0,0,1
+        LeftAlignLabel:
+            text: root.ingredients
+            text_size: self.size
+            color: 1,1,1,0.8
+
+    FitLabel:
+        text: str(root.price) + "€"      ## or ""\u20ac" ## price in Euro (€)
+        font_size: dp(20)
+        bold: True
+        color: 1,0.45,0,1
+        halign: 'right'
+        valign: 'middle'
+        padding_x: dp(10)
+        size: dp(10), dp(10)
+        pos_hint: { "top": .9 }
+
+<LeftAlignLabel@Label>:
+    halign: 'left'
+    valign: 'center'
+    padding_x: dp(10)
+    padding_y: dp(0)
+    canvas.before:
+        Color:
+            #rgb: utils.get_random_color()
+            rgba: 0, 0, 0, 0
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+<FitLabel@LeftAlignLabel>:
+    size_hint: None, None      # force manual control
+    size: self.texture_size    # size the Label to the Texture size !
+
+<BackgroundColor@Widget>
+    background_color: 1, 0.45, 0, 1
+    canvas.before:
+        Color:
+            rgba: root.background_color
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [10,]
+
+<BackgroundLabel@FitLabel+BackgroundColor>
+    background_color: 0, 0, 0, 0
+    height: dp(10)
+
+<CoverImage@CoverBehavior+Image>:
+    reference_size: self.texture_size
