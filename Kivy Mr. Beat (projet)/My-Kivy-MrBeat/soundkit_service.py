@@ -103,8 +103,8 @@ class SoundKitService():
     source_tracks_mixer = None  # mixer for all tracks
 
     def __init__(self, audio_engine, bpm, nbr_steps):
-        self.sound_kit = SoundKit1() # kit1 - default
-        #self.sound_kit = SoundKit2() # kit2 - handpan
+        #self.sound_kit = SoundKit1() # kit1 - default
+        self.sound_kit = SoundKit2() # kit2 - handpan
         self.audio_engine = audio_engine
         self.bpm = bpm
         self.nbr_steps = nbr_steps
