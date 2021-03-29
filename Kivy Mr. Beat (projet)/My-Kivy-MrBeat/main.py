@@ -19,13 +19,13 @@ Builder.load_file("play_indicator.kv")
 class MainWidget(RelativeLayout):
 
     # MAIN UI PARAMETERS
-    NBR_STEPS_PER_TRACK = 16 # number of steps on a track, e.g. 16 per default
-    BPM_VALUE = 60  # start number of beats per minutes, e.g. 120
-    BPM_MIN_VALUE = 1 # min. beats per minutes, e.g. 0
-    BPM_MAX_VALUE = 300 # max. beats per minutes, e.g. 500
-    BPM_STEP_VALUE = 10 # increment value for beats per minutes, e.g. +/- 5
-    DELTA_X_SIZE = 400  # parameter to increase or decrease the default app screen size
-    DELTA_Y_SIZE = -200  # parameter to increase or decrease the default app screen size
+    NBR_STEPS_PER_TRACK = 16  # number of steps on a track, e.g. 16 per default
+    BPM_VALUE = 115            # start number of beats per minutes, e.g. 120
+    BPM_MIN_VALUE = 1         # min. beats per minutes, e.g. 0
+    BPM_MAX_VALUE = 300       # max. beats per minutes, e.g. 500
+    BPM_STEP_VALUE = 5        # increment value for beats per minutes, e.g. +/- 5
+    DELTA_X_SIZE = 400        # parameter to increase or decrease the default app screen size
+    DELTA_Y_SIZE = 0          # parameter to increase or decrease the default app screen size
 
     # KIVY UI PARAMETERS
     a_red_color = (1, 0, 0, 1)
@@ -36,11 +36,12 @@ class MainWidget(RelativeLayout):
     play_stop_color = ColorProperty(a_green_color)
     bpm_value_label = StringProperty()
 
-    # MAIN UI VARIABLE
+    # MAIN UI VARIABLES (fixed)
     step_index = 0
     event_bpm_clock = None
     bpm_new_value = 0
-    button_width_lalign = dp(120) # width of the left aligned buttons
+    bpm_time_sleep = 0.2
+    button_width_lalign = dp(120)  # width of the left aligned buttons
 
     # CONSTRUCTOR
     def __init__(self, **kwargs):
@@ -103,12 +104,12 @@ class MainWidget(RelativeLayout):
     def update_bpm(self, text_button):
         self.bpm_new_value = self.SKS.get_bpm()
         if text_button == '+':
-            self.event_bpm_clock = Clock.schedule_interval(self.dt_increase_bpm, 0.3)
+            self.event_bpm_clock = Clock.schedule_interval(self.dt_increase_bpm, self.bpm_time_sleep)
         else:
-            self.event_bpm_clock = Clock.schedule_interval(self.dt_decrease_bpm, 0.3)
+            self.event_bpm_clock = Clock.schedule_interval(self.dt_decrease_bpm, self.bpm_time_sleep)
 
     def dt_increase_bpm(self, dt):
-            if self.bpm_new_value == 1:
+            if self.bpm_new_value == self.BPM_MIN_VALUE:
                 self.bpm_new_value = self.BPM_STEP_VALUE
             else:
                 self.bpm_new_value += self.BPM_STEP_VALUE
@@ -124,9 +125,9 @@ class MainWidget(RelativeLayout):
 
     def stop_and_change_bpm(self):
         import time
-        time.sleep(0.3)  # 0.3 ou 0.4
+        time.sleep(self.bpm_time_sleep)  # 0.2 ... 0.4
         Clock.unschedule(self.event_bpm_clock)
-        print(f"* DEBUG - bpm_new_value={self.bpm_new_value} to set by SKS")
+        #print(f"* DEBUG - bpm_new_value={self.bpm_new_value} to set by SKS")
         self.bpm_value_label = str(self.bpm_new_value)
         self.SKS.set_bpm(self.bpm_new_value)
 
