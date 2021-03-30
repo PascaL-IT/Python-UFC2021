@@ -3,7 +3,6 @@
 ### Développeur Python | Formation Complète 2021 
 
 Création d'applications - Web, Mobile, Jeux, Desktop UI - avec <b>Python 3.x<b>, <b>HTML 5<b>, <b>CSS 3<b>, <b>Django<b> et <b>Kivy<b>
-  
 Déploiement sur smartphone Android/iOS, GitHub (Page) et Heroku (PaaS).   
 
 Lien: https://www.udemy.com/course/developpeur-python-formation-complete/
