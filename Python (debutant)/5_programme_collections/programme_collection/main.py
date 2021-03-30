@@ -2,7 +2,7 @@
 
 #Tuples
 print("** Tuples: ")
-famille = ("Pascal", "Octave", "Térence", "Virgile", "Stéphanie")
+famille = ("Toto", "Octo", "Této", "Vito", "Pasco")
 
 for p in famille:
      print(p)
@@ -22,10 +22,10 @@ print(*amis) #unpack
 for a in amis:
      print(a)
      print(*a)
-print(*"Pascal")
+print(*"Toto")
 
 #Slices
-print("Pascal"[1 :6 :2])
+print("Toto"[1 :6 :2])
 
 
 
