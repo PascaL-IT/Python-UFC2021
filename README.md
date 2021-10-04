@@ -4,7 +4,7 @@
 
 Création d'applications - Web, Mobile, Jeux, Desktop UI - avec **Python 3.x, HTML 5, CSS 3, Django et Kivy**.
   
-Déploiement sur desktop, smartphone Android/iOS, GitHub Pages et Heroku (PaaS).   
+Déploiement sur desktop, smartphone Android/iOS, GitHub Pages et Cloud Heroku (PaaS).   
 
 Lien: https://www.udemy.com/course/developpeur-python-formation-complete/
 
