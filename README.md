@@ -8,6 +8,8 @@ Déploiement sur desktop, smartphone Android/iOS, GitHub Pages et Cloud **Heroku
 
 Base de données : **PostgreSQL** , SQLite
 
+Basic **REST** API with JSON
+
 Lien: https://www.udemy.com/course/developpeur-python-formation-complete/
 
 ![ScreenHunter_clipboard](https://user-images.githubusercontent.com/36189996/112857718-6c913980-90b1-11eb-9b37-db65d147b9f3.jpg)
