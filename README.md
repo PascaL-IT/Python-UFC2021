@@ -4,7 +4,7 @@
 
 Création d'applications - Web, Mobile, Jeux, Desktop UI - avec **Python 3.x, HTML 5, CSS 3, Django et Kivy**.
   
-Déploiement sur desktop, smartphone Android/iOS, GitHub Pages et Cloud **Heroku** (PaaS).   
+Déploiement sur desktop, smartphone Android/iOS, GitHub Pages et le cloud **Heroku** (PaaS).   
 
 Base de données : **PostgreSQL** , SQLite
 
